@@ -2,10 +2,82 @@
 ## Resynant Harmonyzer NMR Spectrometer SDR Development
 ### Per Vices Crimson TNG Platform
 
-**Document Version:** 1.0
-**Date:** November 8, 2025
+**Document Version:** 2.0
+**Date:** November 20, 2025 (Updated from v1.0, Nov 8, 2025)
 **Prepared by:** Resynant, Inc.
 **For:** Per Vices Corporation
+
+**Project Status:** Requirements complete, ready for SOW development
+**Funding Status:** Secured ($900K PO + $1M Series A)
+**Timeline:** 36 weeks to production (August 2026)
+
+---
+
+## 0. Historical Context: Lessons from Previous Approach
+
+### 0.1 Why This Is Attempt #2
+
+This project represents Resynant's **second attempt** to modernize the Harmonyzer NMR platform. Understanding why the first approach failed is critical to avoiding similar pitfalls.
+
+**Previous Attempt: Tabor Proteus AWG + OpenVNMRJ (2023-2024)**
+
+**Approach:**
+- Platform: Tabor Proteus Arbitrary Waveform Generator (repurposed for NMR)
+- Software: Integration with OpenVNMRJ (open-source Varian software fork)
+- Architecture: Complex translation layers (OVJ PSG → UCODE → TEproc → SCPI commands)
+
+**Why It Failed:**
+
+1. **Software Complexity Overload:** Multiple abstraction layers between pulse sequence and hardware
+2. **"Unknown Unknowns":** Critical gaps in GPIO, hardware looping, phase cycling remained unresolved
+3. **AWG Not Designed for NMR:** Proteus lacked native phase-coherent multi-channel architecture
+4. **Legacy Software Burden:** Backward compatibility with OpenVNMRJ limited design flexibility
+5. **Vendor Dependency Risk:** Key features required Tabor assistance with unclear feasibility
+
+**Project Status:** Appears to have stalled by mid-2024
+
+### 0.2 Why Per Vices Crimson TNG Approach Is Different (and Better)
+
+**1. Purpose-Built SDR vs. Repurposed AWG**
+- Crimson TNG designed for multi-channel phase-coherent applications (radar, communications)
+- Factory-calibrated JESD204B synchronization, not retrofitted
+
+**2. Simpler Software Architecture**
+- Direct UDP streaming (VITA 49/PVAN-11 standard) - no complex translation layers
+- Build fresh software optimized for Crimson TNG, not constrained by legacy OpenVNMRJ
+
+**3. Well-Defined Data Interface**
+- PVAN-11 = VITA 49 industry standard (documented, proven)
+- Established 10 GbE network streaming vs. uncertain SCPI patterns
+
+**4. Established SDR Platform**
+- Proven customer base in similar phase-coherent applications
+- Per Vices experience with multi-channel synchronization challenges
+
+**5. Clear Customization Scope**
+- GPIO expander: Well-defined electrical/timing requirements
+- FPGA CIC decimation: Understood signal processing task
+- No fundamental architectural "unknowns" like Tabor approach had
+
+### 0.3 Critical Lessons Applied to This Project
+
+**DO:**
+- Keep software architecture simple - minimize abstraction layers
+- Build fresh software optimized for platform, not forced legacy integration
+- Define clear acceptance criteria and validate incrementally
+- Front-load the "unknown unknowns" - identify gaps early in SOW
+
+**DON'T:**
+- Create complex translation layers (avoid UCODE → TEproc → SCPI pattern)
+- Assume vendor will resolve unclear technical challenges - get specifics in SOW
+- Underestimate timeline when "unknowns" are mentioned repeatedly
+- Proceed without well-defined data interfaces and control mechanisms
+
+**Warning Signs to Watch For:**
+- Per Vices saying "we'll need to investigate how to..." for critical features
+- Custom FPGA work scope becoming vague or open-ended
+- GPIO timing or data acquisition having "unknowns" after SOW
+- Software architecture requiring >3 translation/abstraction layers
 
 ---
 
@@ -15,23 +87,29 @@
 
 Develop a modern software-defined radio (SDR) transmitter and receiver system for the Resynant Harmonyzer high-resolution solid-state NMR spectrometer platform, replacing legacy refurbished Varian technology with the Per Vices Crimson TNG SDR solution.
 
+**This is Resynant's second modernization attempt.** The previous approach (Tabor Proteus AWG + OpenVNMRJ) failed due to software complexity and unclear vendor capabilities. The Crimson TNG approach addresses these lessons with simpler architecture and proven SDR technology.
+
 ### 1.2 Business Context
 
-**Current Situation:**
-- Resynant currently fulfills customer orders using refurbished legacy Varian DDR (direct digital receiver) technology
-- 2 customers × 2 units currently in hand, several orders pending
-- Recent large order from Indiana University provides R&D investment opportunity
+**Current Situation (November 2025):**
+- Resynant currently fulfills customer orders using refurbished legacy Varian DDR technology
+- **Major Milestone:** $900K purchase order from Indiana University (600 MHz console)
+- **Funding Secured:** $1M Series A financing (closed November 2025)
+- **Total Available:** $1.9M for R&D and production deployment
+- **Team Committed:** Project manager (Lauren Price), head of R&D (Alex Dreena), CEO/NMR specialist (Chad Rienstra)
 
 **Strategic Importance:**
-- Phase out dependence on aging, unsupportable legacy technology
+- Phase out dependence on aging, unsupportable legacy Varian technology
 - Enable modern NMR capabilities and improved customer support
 - Position Resynant for growth in 2026-2027 market expansion
 - Differentiate Harmonyzer product with superior specifications
+- **Critical:** Avoid repeating Tabor/OpenVNMRJ failure - simpler architecture required
 
 **Market Opportunity:**
-- Initial prototype: 1 unit (Q1 2026)
-- Near-term deployment: 10 units within 12 months of validation
-- Production volume: 50-99 units per year (2026-2027 onwards)
+- **Prototype:** 1 unit (February 2026 delivery target)
+- **Beta Testing:** Indiana University 600 MHz console (May-June 2026)
+- **Initial Production:** 10 units (Q3-Q4 2026)
+- **Production Volume:** 50-99 units per year (2027+ ongoing)
 - Volume pricing to be negotiated with Per Vices
 
 ---
@@ -48,7 +126,16 @@ Develop a modern software-defined radio (SDR) transmitter and receiver system fo
 | **Dynamic Range** | 17-20 bit ENOB | 16-bit + decimation | ⚠️ To verify |
 | **GPIO Triggers** | 8-12 TTL outputs, ~100 ns precision | Via GPIO expander | ⚠️ Custom board |
 | **Sample Rate** | 325 MSPS (max) | 325 MSPS | ✅ Met |
-| **Data Interface** | 10 GbE | SFP+ 10 GbE | ✅ Met |
+| **Data Interface** | 10 GbE, VITA 49 standard | SFP+ 10 GbE, PVAN-11 (VITA 49) | ✅ Met |
+
+**Data Interface Details (PVAN-11/VITA 49):**
+- **Standard:** VITA 49 (industry-standard RF data format, not proprietary)
+- **Per Vices Implementation:** PVAN-11 packet format over UDP/IP
+- **I/Q Format:** 32 bits per sample (16-bit signed I + 16-bit signed Q)
+- **Transport:** UDP streaming over 10 GbE SFP+
+- **Bandwidth Constraint:** 4 channels × 325 MSPS = 41.6 Gbps raw → **FPGA decimation required** to fit 10 GbE
+- **Documentation:** https://support.pervices.com/application-notes/pvan-11-dataformat-spec/
+- **Implication:** CIC decimation is **mandatory** (not optional) for multi-channel operation
 
 ### 2.2 Key Technical Challenges
 
@@ -119,131 +206,168 @@ The Crimson TNG platform aligns exceptionally well with Resyannt Harmonyzer requ
 
 ## 4. Project Timeline
 
-### 4.1 Development Phases (ACCELERATED SCHEDULE)
+### 4.1 Development Phases (REVISED REALISTIC SCHEDULE)
+
+**Note:** This timeline reflects lessons learned from the Tabor project failure. Realistic pacing ensures quality over speed, and includes Indiana University beta testing opportunity.
 
 ```
-Phase 0: Requirements Definition & SOW (ACCELERATED)
+Phase 0: Documentation and SOW (3 weeks)
 ├─ November 8, 2025       ✓ Requirements documentation complete
-├─ November 11-15, 2025   → Per Vices technical review (EXPEDITED)
-├─ November 18-22, 2025   → SOW development and negotiation
-└─ November 29, 2025      → SOW approval and project kickoff
-    Duration: 3 weeks (vs. 6-8 weeks baseline)
-    CRITICAL: Requires immediate Per Vices engagement
+├─ November 21, 2025      → Documentation package submitted to Per Vices
+├─ November 25-26, 2025   → Technical alignment call
+├─ December 6, 2025       → SOW draft received from Per Vices
+└─ December 13, 2025      → SOW approval and project kickoff
+    Duration: 5 weeks (realistic review and negotiation)
 
-Phase 1: Prototype Development (Per Vices) - ACCELERATED
-├─ December 2025          → Hardware assembly (standard Crimson TNG)
-├─ December 2025          → GPIO expander board (expedited development)
-├─ December-January 2026  → FPGA customization (CIC decimation)
-└─ January 31, 2026       → Factory testing and delivery
-    Duration: 8 weeks (vs. 12-14 weeks baseline)
-    Deliverable: Crimson TNG prototype with GPIO expander
-    CRITICAL: Requires Per Vices priority commitment
+Phase 1: Prototype Development (11 weeks)
+├─ Dec 16, 2025 - Jan 10  → Hardware assembly + GPIO expander design (4 weeks)
+├─ Jan 13 - Feb 7         → FPGA development + integration (4 weeks)
+├─ Feb 10 - Feb 28        → Factory testing and delivery prep (3 weeks)
+└─ February 28, 2026      → Prototype delivered to Resynant
+    Duration: 11 weeks (includes GPIO expander custom board)
+    Deliverable: Crimson TNG prototype with GPIO expander + CIC decimation
 
-Phase 2: Prototype Validation (Resynant) - ACCELERATED
-├─ February 1-14, 2026    → Phase 1 bench testing (electrical, timing)
-├─ February 15-28, 2026   → Phase 2 system integration (NMR magnet)
-├─ March 1-15, 2026       → Phase 3 multi-channel validation (CP, decoupling)
-├─ March 16-25, 2026      → Phase 4 performance characterization
-└─ March 31, 2026         → Validation report and acceptance decision
-    Duration: 8 weeks (vs. 12-16 weeks baseline)
+Phase 2: Prototype Validation (11 weeks)
+├─ Mar 2-13, 2026         → Bench testing (electrical, timing) (2 weeks)
+├─ Mar 16 - Apr 10        → NMR integration (400 MHz magnet) (4 weeks)
+├─ Apr 13 - May 8         → Multi-channel validation (600 MHz) (4 weeks)
+└─ May 15, 2026           → Validation complete, acceptance decision
+    Duration: 11 weeks (thorough testing, troubleshooting buffer)
     Deliverable: Test report with pass/fail determination
-    CRITICAL: Requires dedicated Resynant resources and magnet access
 
-Phase 3: Production Readiness (Conditional) - ACCELERATED
-├─ April 2026             → FPGA optimization (waveform looping, etc.)
-├─ April-May 2026         → Software integration with Harmonyzer
-├─ May 2026               → Final documentation and training
-└─ May 31, 2026           → Production release
-    Duration: 8 weeks (vs. 10-12 weeks baseline)
+Phase 3: Beta Testing at Indiana University (NEW - 6 weeks)
+├─ May 18 - June 30       → Field testing with beta customer
+├─ Side-by-side comparison with legacy Varian system
+├─ Real-world usage, reliability testing
+└─ Customer feedback collection
+    Duration: 6 weeks
+    Deliverable: Beta test report, production readiness assessment
+
+Phase 4: Production Readiness (4 weeks)
+├─ July 1 - August 1      → FPGA optimization based on validation
+├─ Software integration with Harmonyzer production system
+├─ Final documentation and training materials
+└─ August 1, 2026         → Production release
+    Duration: 4 weeks
     Deliverable: Production-ready system
-    CRITICAL: Parallel development during Phase 2 validation
 
-Phase 4: Initial Production Deployment
-├─ June-August 2026       → First 10 production units
-└─ Q4 2026 onwards        → Full production (50-99 units/year)
+Phase 5: Initial Production Deployment
+├─ August 2026            → First production order (10 units)
+├─ Sep-Oct 2026           → Production and delivery
+└─ Nov-Dec 2026           → Customer installations
+    First production units: Q3-Q4 2026
 ```
 
-**ACCELERATED TIMELINE SUMMARY:**
-- Requirements to Production: **6 months** (vs. 11 months baseline)
-- **Time savings: 5 months (45% reduction)**
-- **First production units: Q2-Q3 2026** (vs. Q4 2026-Q1 2027)
+**REVISED TIMELINE SUMMARY:**
+- Requirements to Production: **36 weeks (8.5 months)**
+- Prototype delivery: **February 28, 2026** (+4 weeks vs. original)
+- Beta testing: **May-June 2026** (NEW - Indiana University opportunity)
+- Production release: **August 1, 2026** (+8 weeks vs. original accelerated plan)
+- **First production units: Q3-Q4 2026**
 
-### 4.2 Summary Timeline (ACCELERATED)
+### 4.2 Summary Timeline (REVISED)
 
-| Milestone | Target Date | Duration from Start | Time Saved |
-|-----------|-------------|-------------------|------------|
-| Requirements Complete | November 8, 2025 | Week 0 ✓ | — |
-| **SOW Approval** | **November 29, 2025** | **Week 3** | **3 weeks** |
-| **Prototype Delivery** | **January 31, 2026** | **Week 12** | **8 weeks** |
-| **Validation Complete** | **March 31, 2026** | **Week 20** | **12 weeks** |
-| **Production Release** | **May 31, 2026** | **Week 29** | **15 weeks** |
-| First Production Units | June-August 2026 | Week 32-42 | 10-20 weeks |
+| Milestone | Original Plan | Revised Plan | Rationale |
+|-----------|--------------|--------------|-----------|
+| **SOW Approval** | Nov 29, 2025 | Dec 13, 2025 | +2 weeks (realistic review) |
+| **Prototype Delivery** | Jan 31, 2026 | Feb 28, 2026 | +4 weeks (GPIO expander complexity) |
+| **Validation Complete** | Mar 31, 2026 | May 15, 2026 | +6 weeks (thorough testing) |
+| **Beta Testing** | N/A | Jun 30, 2026 | NEW (Indiana opportunity) |
+| **Production Release** | May 31, 2026 | Aug 1, 2026 | +8 weeks (beta feedback integration) |
+| **First Production Units** | Jun-Aug 2026 | Sep-Oct 2026 | +2 months |
 
-**Total Time to Production: ~29 weeks (6.5 months) from requirements complete**
-**Time savings vs. baseline: 15 weeks (3.5 months, 45% reduction)**
+**Total Time to Production: ~36 weeks from requirements complete**
+**Trade-off:** Slower but more thorough - avoids Tabor project pitfalls
 
-### 4.3 Critical Path Items (ACCELERATED SCHEDULE)
+### 4.3 Critical Path Items (CURRENT SPRINT: Nov 21-25, 2025)
 
-**WEEK 1-3 (Nov 8-29): SOW Development - HIGHEST PRIORITY**
-1. **Immediate Per Vices Engagement** (by Nov 11)
-   - Submit complete documentation package TODAY
-   - Request expedited technical review (3-5 business days)
-   - Schedule technical call by Nov 15
-   - **Owner:** Resynant to initiate, Per Vices to commit resources
+**THIS WEEK (Nov 21-25): Re-engage Per Vices - HIGHEST PRIORITY**
 
-2. **Rapid SOW Turnaround** (Nov 18-29)
-   - Per Vices prepares SOW during week of Nov 18
-   - FPGA development NRE estimate (prioritize CIC decimation)
-   - GPIO expander specifications and cost (must confirm feasibility)
-   - **Target SOW delivery:** November 22
-   - **Target SOW approval:** November 29
-   - **Risk Mitigation:** Daily check-ins during this period
+**Status as of Nov 20, 2025:**
+- ✅ Requirements documentation complete (~170 pages)
+- ✅ GPIO specifications complete (7 pages, detailed TTL interface requirements)
+- ✅ PVAN-11 data format specification downloaded and documented
+- ✅ Funding secured ($900K PO + $1M Series A)
+- ✅ Team assigned (Chad, Lauren, Alex)
 
-**WEEK 4-12 (Dec 1 - Jan 31): Prototype Development - CRITICAL PATH**
-3. **GPIO Expander Expedited Development** (December 2025)
-   - **Must be completed by January 15** to meet prototype deadline
-   - Parallel track with main hardware assembly
-   - Early prototype for timing validation by January 20
-   - **Risk:** Custom board development can slip; need Per Vices commitment
+**This Week Actions:**
+1. **Documentation Package Submission** (Nov 21)
+   - Email to Brandon Malatest with 8 specification documents
+   - GPIO_SPECIFICATIONS.md (NEW - addresses Per Vices critical question)
+   - pvan11_dataformat_spec.md (NEW - VITA 49 standard documented)
+   - **Owner:** Chad Rienstra
+   - **Status:** Ready to send
 
-4. **FPGA CIC Decimation** (December-January 2026)
-   - **Must be included in prototype delivery** (non-negotiable for schedule)
-   - Begin development December 1 (immediately after SOW)
-   - Factory validation by January 25
-   - **Risk Mitigation:** If CIC unavailable, fall back to host-side decimation (acceptable but not ideal)
+2. **Technical Alignment Call** (Nov 25-26)
+   - Review GPIO expander feasibility and timeline
+   - Confirm FPGA CIC decimation approach (mandatory for bandwidth)
+   - SOW development timeline (target Dec 6 draft, Dec 13 approval)
+   - **Owner:** Chad + Lauren
 
-5. **Hardware Assembly** (December 2025)
-   - Standard Crimson TNG assembly (should be routine)
-   - Priority production slot required from Per Vices
-   - **Target completion:** January 20 (allows 10 days for integration/testing)
+3. **Software Development Kickoff** (Nov 21-24)
+   - UDP receiver skeleton code (PVAN-11 packet parsing)
+   - Development environment setup (Python/C++)
+   - Team briefing (Lauren, Alex)
+   - **Owner:** Chad (20 hrs/week software development)
 
-**WEEK 13-20 (Feb 1 - Mar 31): Validation Testing - PARALLEL ACTIVITIES**
-6. **Test Environment Preparation** (January 2026, DURING prototype development)
-   - **MUST START IMMEDIATELY** - do not wait for prototype delivery
-   - Secure NMR magnet access (February-March) - book NOW
-   - Prepare test samples (adamantane, glycine, etc.) - order NOW
-   - Set up bench test equipment - inventory and procure by December
-   - **Owner:** Resynant preparation team
+**NEXT 3 WEEKS (Nov 25 - Dec 13): SOW Development**
+4. **Per Vices SOW Preparation** (Dec 2-6)
+   - GPIO expander specifications and NRE estimate
+   - FPGA CIC decimation development plan
+   - Prototype delivery timeline (target Feb 28, 2026)
+   - Production unit pricing (10-unit and volume tiers)
 
-7. **Compressed Validation Schedule** (February-March 2026)
-   - Bench testing: 2 weeks (vs. 4 weeks baseline) - focus on critical tests only
-   - NMR integration: 2 weeks (vs. 4 weeks) - pre-planned test sequences
-   - Multi-channel validation: 2 weeks (vs. 4 weeks) - parallel testing where possible
-   - Performance characterization: 2 weeks (vs. 4 weeks) - prioritize must-pass criteria
-   - **Risk:** Less time for troubleshooting; may need extended hours
+5. **SOW Review and Approval** (Dec 9-13)
+   - Internal review by Chad, Lauren, Alex
+   - Negotiation if needed (timeline, pricing, deliverables)
+   - Final approval and PO issuance (Dec 13)
+   - Project kickoff call (Dec 16)
 
-**WEEK 21-29 (Apr 1 - May 31): Production Readiness - OVERLAP WITH VALIDATION**
-8. **Parallel Software Development** (Starts December, overlaps with validation)
-   - **MUST NOT wait for prototype acceptance**
-   - Begin Harmonyzer integration software in December (simulator testing)
-   - Pulse sequence compiler development January-February
-   - Ready for prototype integration by March
-   - **Risk Mitigation:** Parallel path allows recovery time if validation issues arise
+**DEC 16 - FEB 28: Prototype Development (11 weeks)**
+6. **Per Vices Hardware Development**
+   - GPIO expander board (custom, TTL 0-5V, ±100ns timing)
+   - FPGA CIC decimation filters (mandatory for bandwidth)
+   - Crimson TNG assembly and integration
+   - Factory testing and validation
 
-9. **FPGA Optimization** (April-May, conditional)
-   - Waveform looping implementation (if not in prototype)
-   - Performance tuning based on validation results
-   - **Can be deferred if needed** - not on critical path for first production units
+7. **Resynant Parallel Activities**
+   - Software development: UDP receiver, PVAN-11 parsing (Dec-Jan)
+   - Pulse sequence compiler framework (Jan-Feb)
+   - Test environment preparation (bench equipment, samples)
+   - Magnet scheduling (400 MHz, 600 MHz for Mar-May)
+
+**MAR 2 - MAY 15: Validation Testing (11 weeks)**
+8. **Bench Testing** (Mar 2-13, 2 weeks)
+   - GPIO timing precision validation
+   - Frequency range verification
+   - Phase coherency measurement
+   - Data throughput testing
+
+9. **NMR Integration** (Mar 16 - Apr 10, 4 weeks)
+   - 400 MHz magnet: Basic NMR signal acquisition
+   - SNR measurement (adamantane standard)
+   - Dynamic range characterization
+   - Single-channel optimization
+
+10. **Multi-Channel Validation** (Apr 13 - May 8, 4 weeks)
+    - 600 MHz magnet: Advanced NMR techniques
+    - Cross-polarization experiments
+    - Decoupling performance (TPPM sequences)
+    - Complex pulse sequences
+
+**MAY 18 - JUN 30: Beta Testing at Indiana (6 weeks) - NEW PHASE**
+11. **Field Testing with Beta Customer**
+    - Indiana University 600 MHz console upgrade
+    - Side-by-side comparison with legacy Varian
+    - Real-world usage and reliability testing
+    - Customer feedback collection
+
+**JUL 1 - AUG 1: Production Readiness (4 weeks)**
+12. **Final Optimization and Release**
+    - FPGA tuning based on validation results
+    - Software integration with Harmonyzer production
+    - Documentation and training materials
+    - First production order (10 units)
 
 ---
 
@@ -279,12 +403,25 @@ Phase 4: Initial Production Deployment
 
 ### 5.3 Budget Planning
 
-**Estimated Order of Magnitude (Placeholder - Per Vices to Provide Actual Quote):**
-- NRE for customization: $XX,XXX - $XXX,XXX
-- Prototype unit: $XX,XXX
-- Production units (volume pricing): $XX,XXX each
+**Estimated Total Project Cost (Per Vices + Internal):**
 
-**Decision Point:** SOW review will provide actual costs for budget approval
+| Category | Amount | Notes |
+|----------|--------|-------|
+| **Per Vices Costs** | $107K-$170K | Prototype + GPIO + FPGA CIC (pending SOW) |
+| **Internal Personnel** | $150K-$200K | Chad (20 hrs/week), Lauren (PM), Alex (R&D) |
+| **Equipment & Materials** | $25K | Test equipment, samples (mostly in-house) |
+| **Software Contractor** | $0-$30K | Optional, if needed for schedule |
+| **Beta Testing (Indiana)** | $10K | Travel, support, contingency |
+| **Contingency (10%)** | $30K-$40K | Buffer for unexpected issues |
+| **TOTAL** | **$322K-$465K** | **Estimated project budget** |
+
+**Funding Status (as of November 2025):**
+- ✅ **$900K PO from Indiana University** (600 MHz console)
+- ✅ **$1M Series A financing** (closed November 2025)
+- ✅ **Total Available: $1.9M** for R&D and production deployment
+- ✅ **Budget Risk: LOW** - ample funding available (project ~$400K of $1.9M)
+
+**Decision Point:** SOW review (Dec 6-13) will provide Per Vices actual costs for final budget approval
 
 ---
 
@@ -437,53 +574,71 @@ Project benefits from well-defined requirements, proven SDR platform, and experi
 
 ## 10. Next Steps and Decision Points
 
-### 10.1 Immediate Actions (This Week - November 2025)
+### 10.1 Immediate Actions (THIS WEEK - November 21-25, 2025)
+
+**Status as of Nov 20, 2025:**
+- ✅ Requirements documentation complete (~170 pages)
+- ✅ GPIO specifications complete (GPIO_SPECIFICATIONS.md, 7 pages)
+- ✅ PVAN-11 data format documented (pvan11_dataformat_spec.md)
+- ✅ Funding secured ($900K PO + $1M Series A = $1.9M available)
+- ✅ Team assigned (Chad, Lauren, Alex)
+
+**This Week Actions:**
 
 **Resynant:**
-1. ✅ Complete requirements documentation (DONE)
-2. ⬜ Internal review and approval of specifications
-3. ⬜ Submit documentation package to Per Vices (Brandon Malatest)
-4. ⬜ Request Per Vices responses to critical questions (Section 8.1)
+1. ⬜ **Send email to Per Vices** (Nov 21) - Brandon Malatest
+   - Attach all 8 specification documents
+   - Request technical alignment call (Nov 25-26)
+   - Highlight funding secured and team readiness
+2. ⬜ **Software development kickoff** (Nov 21-24)
+   - UDP receiver skeleton code (PVAN-11 parsing)
+   - Development environment setup
+3. ⬜ **Technical alignment call** (Nov 25-26)
+   - Review GPIO expander feasibility
+   - Confirm FPGA CIC decimation plan (mandatory for bandwidth)
+   - SOW timeline discussion
 
 **Per Vices:**
-5. ⬜ Technical review of requirements by engineering team
-6. ⬜ Provide responses to critical questions
-7. ⬜ Schedule follow-up technical discussion call
+4. ⬜ Review technical documentation package
+5. ⬜ Provide feedback on GPIO expander and FPGA CIC approach
+6. ⬜ Commit to SOW delivery timeline (target Dec 6)
 
-### 10.2 Near-Term Actions (2-4 Weeks - December 2025)
+### 10.2 Near-Term Actions (3 Weeks - Nov 25 - Dec 13, 2025)
 
 **Per Vices:**
-1. ⬜ Develop Statement of Work (SOW) with:
-   - Detailed technical specifications
-   - FPGA development scope and deliverables
-   - Validation metrics and acceptance criteria
-   - Timeline with milestones
-   - Cost breakdown (NRE, prototype, production pricing)
-   - Technical support commitment
+1. ⬜ **Develop Statement of Work (SOW)** (target Dec 6):
+   - GPIO expander specifications and NRE cost
+   - FPGA CIC decimation development plan
+   - Prototype delivery timeline (target Feb 28, 2026)
+   - Production unit pricing (10-unit and volume tiers)
+   - Technical support commitment (weekly calls, on-site during validation)
 
 **Resynant:**
-2. ⬜ Review SOW
-3. ⬜ Negotiate terms if needed
-4. ⬜ Internal budget approval
-5. ⬜ **DECISION POINT:** Approve SOW and issue purchase order
+2. ⬜ **Review SOW internally** (Dec 9-11)
+   - Technical review by Chad
+   - Commercial review by Lauren
+   - Budget approval confirmation
+3. ⬜ **Negotiate if needed** (Dec 11-12)
+4. ⬜ **DECISION POINT: Approve SOW and issue PO** (Dec 13)
 
-### 10.3 Project Kickoff (January 2026)
+### 10.3 Project Kickoff (December 16, 2025)
 
 1. ⬜ Formal project kickoff meeting (Resynant + Per Vices)
-2. ⬜ Establish communication channels and regular check-ins
-3. ⬜ Confirm technical points of contact
-4. ⬜ Begin prototype development (Per Vices)
-5. ⬜ Begin software integration development (Resynant)
-6. ⬜ Prepare test environment (Resynant)
+2. ⬜ Establish weekly status calls (every Monday, 10:00 AM Central)
+3. ⬜ Confirm technical points of contact (Per Vices: Lead Engineer, PM)
+4. ⬜ Begin prototype development (Per Vices: GPIO expander, FPGA CIC)
+5. ⬜ Continue software development (Resynant: UDP receiver, pulse compiler)
+6. ⬜ Finalize test environment preparation plan
 
-### 10.4 Key Decision Points
+### 10.4 Key Decision Points (Revised Timeline)
 
 | Decision Point | Timeline | Criteria |
 |---------------|----------|----------|
-| **SOW Approval** | December 2025 | Cost acceptable; technical feasibility confirmed; timeline reasonable |
-| **Prototype Acceptance** | June 2026 | Meets all must-pass validation criteria (Section 7.1) |
-| **Production Release** | September 2026 | Software integration complete; production cost confirmed; customer acceptance testing passed |
-| **Volume Production** | 2027+ | Market demand validated; unit economics favorable; customer satisfaction metrics met |
+| **SOW Approval** | Dec 13, 2025 | Cost ≤$170K (Per Vices); technical feasibility confirmed; Feb 28 delivery commitment |
+| **Prototype Acceptance** | May 15, 2026 | Meets all must-pass validation criteria (Section 7.1) |
+| **Beta Testing Approval** | May 18, 2026 | Prototype passes; Indiana customer agrees to beta program |
+| **Production Release** | Aug 1, 2026 | Beta testing successful; software integration complete; production cost confirmed |
+| **Volume Production** | 2027+ | 10-unit deployment successful; customer satisfaction; unit economics favorable |
 
 ---
 
@@ -541,27 +696,53 @@ Project benefits from well-defined requirements, proven SDR platform, and experi
 
 ## 12. Conclusion
 
-The Per Vices Crimson TNG SDR platform represents an **excellent solution** for modernizing the Resyannt Harmonyzer NMR spectrometer transmitter and receiver systems. The platform's multi-channel phase-coherent architecture, high-performance converters, and flexible FPGA capabilities align exceptionally well with solid-state NMR requirements.
+The Per Vices Crimson TNG SDR platform represents an **excellent solution** for modernizing the Resynant Harmonyzer NMR spectrometer transmitter and receiver systems. **This is Resynant's second modernization attempt** - lessons learned from the failed Tabor Proteus/OpenVNMRJ approach (2023-2024) directly inform this project's simpler, more pragmatic architecture.
+
+**Why This Approach Will Succeed (Unlike Tabor):**
+- **Purpose-built SDR** (not repurposed AWG) with native phase-coherent multi-channel design
+- **Simpler software architecture:** Direct UDP streaming (VITA 49/PVAN-11) vs. complex translation layers
+- **Well-defined data interface:** Industry-standard VITA 49, documented and proven
+- **No "unknown unknowns":** GPIO expander and FPGA CIC are understood tasks, not vendor dependencies
+- **Clear acceptance criteria:** Defined upfront in SOW, validated incrementally
 
 **Key Strengths:**
 - Core specifications meet or exceed NMR and competitor benchmarks
-- Proven SDR platform with established customer support
-- Customization needs are well-defined and achievable
+- Proven SDR platform with established customer support (radar, communications applications)
+- Customization needs are well-defined and achievable (GPIO expander, FPGA CIC decimation)
 - Clear path from prototype to production deployment
+- **Funding secured:** $1.9M available ($900K PO + $1M Series A)
+- **Team committed:** Chad (NMR specialist + software), Lauren (PM), Alex (R&D)
 
-**Areas of Focus:**
-- GPIO expander development for TTL compatibility and timing precision
-- FPGA CIC decimation for enhanced dynamic range
-- Phased validation to confirm performance specifications
-- Software integration with Harmonyzer control system
+**Critical Success Factors:**
+- **GPIO expander:** Custom board for TTL compatibility (0-5V) and ±100ns timing precision
+- **FPGA CIC decimation:** **Mandatory** for bandwidth (41.6 Gbps → 10 GbE requires decimation)
+- **Phased validation:** Thorough testing (11 weeks) with troubleshooting buffer
+- **Beta testing:** Indiana University field deployment (May-June 2026) before full production
+- **Software simplicity:** Avoid complex abstraction layers that killed Tabor project
 
-**Timeline:** 11 months from SOW approval to production release (September 2026), with first production units in Q4 2026 - Q1 2027.
+**Timeline:** **36 weeks (8.5 months)** from requirements complete to production release (August 2026)
+- Prototype delivery: February 28, 2026
+- Validation complete: May 15, 2026
+- Beta testing: May 18 - June 30, 2026
+- Production release: August 1, 2026
+- First production units: Q3-Q4 2026
 
-**Risk Assessment:** LOW to MODERATE - Well-defined requirements, proven platform, experienced vendors, and phased approach with validation gates.
+**Risk Assessment:** **LOW to MODERATE**
+- Well-defined requirements and proven SDR platform
+- Adequate funding ($1.9M >> $400K project budget)
+- Lessons learned from Tabor failure applied
+- Phased approach with validation gates and beta testing
+- **Watch for:** Per Vices "unknowns" on critical features, FPGA scope creep, software complexity growth
 
-**Business Impact:** Enables phase-out of legacy Varian technology, positions Resynant for market growth in 2026-2027, and differentiates Harmonyzer product with superior specifications and modern technology.
+**Business Impact:**
+- Enables phase-out of unsupportable legacy Varian technology
+- Positions Resynant for market growth (50-99 units/year production)
+- Differentiates Harmonyzer with superior specifications (20-bit ENOB, modern SDR)
+- De-risks technology roadmap with proven vendor partnership
 
 **Recommendation:** **PROCEED** with Per Vices partnership, SOW development, and prototype program as outlined in this document.
+
+**Next Action (Nov 21):** Send documentation package to Brandon Malatest (Per Vices COO) to initiate SOW development.
 
 ---
 
@@ -569,13 +750,43 @@ The Per Vices Crimson TNG SDR platform represents an **excellent solution** for 
 
 This executive summary is supported by detailed technical documentation:
 
-1. **technical_requirements.md** - Comprehensive technical specifications (24 pages)
-2. **use_case_scenarios.md** - Operational use cases and data flow (28 pages)
-3. **test_validation_plan.md** - Detailed testing procedures and acceptance criteria (34 pages)
-4. **requirements_summary.md** - Requirements traceability and gap analysis (22 pages)
-5. **nmr_pulse_sequences.md** - Detailed pulse sequence specifications (36 pages)
+**Core Technical Specifications (~170 pages total):**
+1. **executive_summary.md** - This document (business case, timeline, budget, lessons learned)
+2. **technical_requirements.md** - Comprehensive technical specifications (24 pages)
+3. **requirements_summary.md** - Requirements traceability and gap analysis (22 pages)
+4. **use_case_scenarios.md** - Operational use cases and data flow (28 pages)
+5. **test_validation_plan.md** - Detailed testing procedures and acceptance criteria (34 pages)
+6. **nmr_pulse_sequences.md** - Detailed pulse sequence specifications for FPGA (36 pages)
 
-**Total Documentation:** ~150 pages of comprehensive technical specifications ready for Per Vices engineering review and SOW development.
+**New Documents (November 2025):**
+7. **GPIO_SPECIFICATIONS.md** - Complete GPIO TTL interface requirements (7 pages)
+   - 8-12-16 GPIO configurations
+   - Electrical specifications (0-5V TTL, ±100ns timing)
+   - Functional requirements (TX/RX gating, external triggers)
+8. **pvan11_dataformat_spec.md** - VITA 49 data format specification
+   - UDP packet structure (PVAN-11 = VITA 49 standard)
+   - I/Q data format (32 bits per sample, 16-bit signed I+Q)
+   - Bandwidth constraint analysis (41.6 Gbps → 10 GbE requires FPGA decimation)
+9. **REVISED_PROJECT_TIMELINE.md** - Realistic 36-week timeline (Aug 2026 production)
+10. **4_DAY_SPRINT_GUIDE.md** - Implementation guide (Nov 21-24 software kickoff)
+
+**Supporting Materials:**
+- **IMMEDIATE_ACTIONS.md** - Original accelerated timeline action items (reference)
+- **MILESTONE_STRATEGY_ANALYSIS.md** - Analysis of Tabor project failure (lessons learned)
+- **email_threads_with_pervices.txt** - Historical communication with Per Vices
+- **Case Studies:** GPS/GNSS, Napatech, Radar, Spectrum (Per Vices application examples)
+
+**Total Documentation:** ~200+ pages ready for Per Vices engineering review and SOW development.
+
+**Submission Package (8 core documents to send Nov 21):**
+1. executive_summary.md
+2. technical_requirements.md
+3. requirements_summary.md
+4. use_case_scenarios.md
+5. test_validation_plan.md
+6. nmr_pulse_sequences.md
+7. GPIO_SPECIFICATIONS.md (NEW)
+8. REVISED_PROJECT_TIMELINE.md
 
 ---
 
@@ -586,9 +797,11 @@ Resynant, Inc.
 chad@resynant.com
 (217) 649-8932
 
-**Date:** November 8, 2025
+**Version History:**
+- v1.0: November 8, 2025 - Initial requirements documentation
+- v2.0: November 20, 2025 - Updated with historical context, revised timeline, PVAN-11 spec, funding status
 
-**Status:** Ready for submission to Per Vices Corporation
+**Status:** Ready for submission to Per Vices Corporation (Nov 21, 2025)
 
 **Submitted to:**
 Brandon Malatest, COO

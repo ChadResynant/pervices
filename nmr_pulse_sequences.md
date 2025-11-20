@@ -2,9 +2,15 @@
 ## Resynant Harmonyzer NMR Spectrometer
 ### Detailed Waveform and Timing Requirements
 
-**Document Version:** 1.0
-**Date:** November 8, 2025
+**Document Version:** 2.0
+**Date:** November 20, 2025 (Updated from v1.0, Nov 8, 2025)
 **Customer:** Resynant, Inc.
+
+**Update Summary:**
+- Added Section 1.4: Phased Implementation (Prototype → Beta → Production)
+- Prioritized pulse sequences by project phase (P0/P1/P2/P3)
+- Mapped sequences to validation timeline (Mar-May 2026)
+- Defined decision gates and acceptance criteria
 
 ---
 
@@ -32,6 +38,123 @@ This document provides detailed technical specifications for standard NMR pulse 
 - **1H:** Proton channel (typically Tx B, high power)
 - **13C:** Carbon channel (typically Tx A, medium power)
 - **15N:** Nitrogen channel (typically Tx C or D, lower power)
+
+### 1.4 Phased Implementation: Prototype → Production
+
+**Project Timeline:** 36 weeks (Dec 2025 - Aug 2026)
+- **Prototype Delivery:** Feb 28, 2026
+- **Validation Testing:** Mar 2 - May 15, 2026
+- **Beta Testing (Indiana):** May 18 - Jun 30, 2026
+- **Production Release:** Aug 1, 2026
+
+This document specifies pulse sequences for implementation across multiple project phases. Not all sequences need to be implemented for prototype acceptance - focus on core functionality first, then expand in production.
+
+#### Phase 1: Prototype (Feb-May 2026) - MUST-HAVE for Acceptance
+
+**Goal:** Prove basic NMR functionality and multi-channel coordination
+
+| Sequence | Section | Priority | Acceptance Criteria |
+|----------|---------|----------|---------------------|
+| **Single-Pulse Acquisition** | Section 2 | P0 (Critical) | SNR >50:1 on adamantane (13C) |
+| **Basic Rectangular Pulses** | Section 2 | P0 (Critical) | 90° and 180° pulses, phase control |
+| **Simple TPPM Decoupling** | Section 3 | P0 (Critical) | Multiplet collapse, SNR gain 2-4× |
+| **Cross-Polarization (Basic)** | Section 4 | P1 (High) | CP enhancement ≥2× vs. direct |
+| **Linear Ramp (CP contact)** | Section 4.5.1 | P1 (High) | Required for CP experiments |
+
+**FPGA Requirements (Prototype):**
+- Rectangular waveform generation (all channels)
+- TPPM decoupling (basic 2-phase modulation)
+- Linear amplitude ramps (for CP contact pulses)
+- GPIO timing control (±100 ns precision)
+- CIC decimation filters (mandatory for 10 GbE bandwidth)
+
+**Software Requirements (Prototype):**
+- UDP receiver (PVAN-11 packet parsing)
+- Single-pulse sequence compiler
+- Basic FIR filtering (host-side decimation)
+- FFT for spectral analysis
+- Phase control (0°, 90°, 180°, 270°)
+
+**Validation Tests (Mar-May 2026):**
+- Bench testing: GPIO timing, phase coherency (Mar 2-13)
+- NMR integration: Single-pulse, SNR, dynamic range (Mar 16 - Apr 10)
+- Multi-channel: CP experiments, decoupling (Apr 13 - May 8)
+
+#### Phase 2: Beta Testing (May-Jun 2026) - SHOULD-HAVE for Production
+
+**Goal:** Real-world testing with Indiana University customer
+
+| Sequence | Section | Priority | Beta Test Focus |
+|----------|---------|----------|-----------------|
+| **SPINAL-64 Decoupling** | Section 5.3 | P1 (High) | Superior to TPPM, customer preference |
+| **Gaussian Shaped Pulses** | Section 6.2 | P2 (Medium) | Selective excitation |
+| **Complex Phase Cycling** | Sections 2.6, 4.8 | P2 (Medium) | Advanced artifact suppression |
+| **Tangent Ramp (CP)** | Section 4.5.2 | P2 (Medium) | Optimized CP performance |
+
+**Focus:** User experience, reliability, customer feedback on features
+
+#### Phase 3: Production Release (Jul-Aug 2026) - NICE-TO-HAVE
+
+**Goal:** Full feature set for production deployment
+
+| Sequence | Section | Priority | Production Value |
+|----------|---------|----------|-----------------|
+| **XiX Decoupling** | Section 5.2 | P2 (Medium) | Advanced decoupling option |
+| **Sinc Shaped Pulses** | Section 6.3 | P2 (Medium) | Frequency-selective excitation |
+| **WURST Shaped Pulses** | Section 6.4 | P2 (Medium) | Broadband excitation |
+| **Tanh/HSn Ramps (CP)** | Section 4.5.3-4 | P3 (Low) | Optimized for specific samples |
+| **FPGA Waveform Looping** | Section 3.4.3 | P2 (Medium) | Performance optimization |
+
+**FPGA Enhancements (Production):**
+- Hardware waveform looping (for continuous decoupling)
+- Advanced shaped pulse generation (sinc, Gaussian, WURST)
+- Complex amplitude ramps (tanh, HSn)
+- Additional decimation filter options
+- Performance tuning based on beta feedback
+
+**Software Enhancements (Production):**
+- Advanced pulse sequence compiler (shaped pulses, complex phase cycling)
+- Harmonyzer system integration
+- User interface refinement
+- Calibration and optimization tools
+
+#### Implementation Priority Summary
+
+**P0 (Critical - Prototype Acceptance):**
+- Single-pulse acquisition (Section 2) ✅
+- TPPM decoupling (Section 3) ✅
+- Basic cross-polarization (Section 4.1-4.4, 4.5.1) ✅
+- Rectangular and linear ramp waveforms ✅
+
+**P1 (High - Beta Testing):**
+- SPINAL-64 decoupling (Section 5.3) ⏳
+- Gaussian shaped pulses (Section 6.2) ⏳
+- Tangent ramp CP (Section 4.5.2) ⏳
+- Complex phase cycling (Sections 2.6, 4.8) ⏳
+
+**P2 (Medium - Production Release):**
+- XiX decoupling (Section 5.2) 📋
+- Sinc/WURST shaped pulses (Sections 6.3-6.4) 📋
+- FPGA waveform looping optimization 📋
+
+**P3 (Low - Future Enhancement):**
+- Tanh/HSn ramps (Sections 4.5.3-4.5.4) 💡
+- Additional advanced sequences 💡
+
+#### Decision Gates
+
+**Prototype Acceptance (May 15, 2026):**
+- **Pass Criteria:** All P0 sequences functional, acceptance criteria met
+- **If Pass:** Proceed to beta testing (Indiana)
+- **If Fail:** Identify issues, implement fixes, re-test (buffer: 2-4 weeks)
+
+**Beta Testing Complete (Jun 30, 2026):**
+- **Pass Criteria:** P0+P1 sequences validated in field, customer satisfaction
+- **If Pass:** Proceed to production release
+- **If Fail:** Address beta feedback, prioritize fixes
+
+**Production Release (Aug 1, 2026):**
+- **Deliverable:** P0+P1+P2 sequences implemented, production-ready system
 
 ---
 
@@ -878,25 +1001,77 @@ seq.execute()
 
 ## 11. Conclusion
 
-This document provides comprehensive technical specifications for implementing standard NMR pulse sequences on the Per Vices Crimson TNG platform. Key requirements include:
+This document provides comprehensive technical specifications for implementing standard NMR pulse sequences on the Per Vices Crimson TNG platform across a **phased development timeline** (Prototype → Beta → Production, Dec 2025 - Aug 2026).
 
-1. **Precise timing control:** ~100 ns precision for GPIO triggers, microsecond precision for pulse sequences
-2. **Multi-channel coordination:** Synchronized Tx/Rx operation with deterministic phase relationships
-3. **Waveform generation:** Support for rectangular pulses, shaped pulses, and complex modulation patterns
-4. **FPGA optimization:** CIC decimation for dynamic range, waveform buffering/looping for decoupling
-5. **Software integration:** Pulse sequence compiler and data acquisition interface
+### 11.1 Key Technical Requirements
 
-The specifications presented here represent standard solid-state NMR experiments suitable for prototype validation and production deployment. More advanced sequences can be developed once the baseline functionality is established.
+1. **Precise timing control:** ±100 ns precision for GPIO triggers, ±1 μs for pulse sequences
+2. **Multi-channel coordination:** Synchronized Tx/Rx operation with deterministic phase relationships (<2° std dev)
+3. **Waveform generation:** Rectangular pulses (P0), shaped pulses (P1-P2), complex modulation (P2)
+4. **FPGA capabilities:** CIC decimation (P0, mandatory), waveform looping (P2, optimization)
+5. **Software integration:** Pulse sequence compiler (P0-P1), Harmonyzer integration (P2)
+
+### 11.2 Phased Implementation Strategy
+
+**Phase 1: Prototype (Feb-May 2026) - P0 Priority**
+- **Focus:** Prove basic NMR functionality
+- **Sequences:** Single-pulse, TPPM decoupling, basic CP (Sections 2-4)
+- **FPGA:** Rectangular waveforms, linear ramps, GPIO control, CIC decimation
+- **Acceptance:** SNR >50:1, CP enhancement ≥2×, decoupling gain 2-4×
+
+**Phase 2: Beta Testing (May-Jun 2026) - P1 Priority**
+- **Focus:** Real-world validation at Indiana University
+- **Sequences:** SPINAL-64 decoupling, Gaussian pulses, complex phase cycling
+- **Customer Feedback:** User experience, reliability, feature requests
+- **Decision Gate:** Production release approval (Jun 30, 2026)
+
+**Phase 3: Production (Jul-Aug 2026) - P2 Priority**
+- **Focus:** Full feature set for production deployment
+- **Sequences:** XiX/SPINAL decoupling, sinc/WURST pulses, FPGA looping
+- **Enhancements:** Performance tuning, Harmonyzer integration, calibration tools
+- **Release:** Aug 1, 2026 (36 weeks from requirements complete)
+
+### 11.3 Critical Success Factors
+
+**Prototype Must-Haves (P0):**
+- ✅ Rectangular pulse generation (all channels)
+- ✅ TPPM decoupling (basic 2-phase modulation)
+- ✅ Linear amplitude ramps (CP contact pulses)
+- ✅ GPIO timing control (±100 ns)
+- ✅ CIC decimation filters (mandatory for 10 GbE bandwidth)
+
+**Watch-Outs (Lessons from Tabor Project):**
+- ⚠️ Avoid complex abstraction layers in software
+- ⚠️ Keep FPGA scope well-defined (no "unknowns" in SOW)
+- ⚠️ Validate incrementally (don't wait for complete implementation)
+- ⚠️ Prioritize P0 sequences - defer P2/P3 if needed for timeline
+
+### 11.4 Resource Planning
+
+**FPGA Development (Per Vices):**
+- **Prototype (P0):** CIC decimation, rectangular waveforms, GPIO control → Feb 28, 2026
+- **Production (P2):** Waveform looping, shaped pulses, advanced ramps → Jul-Aug 2026
+
+**Software Development (Resynant):**
+- **Dec 2025 - Jan 2026:** UDP receiver (PVAN-11), pulse compiler (P0 sequences)
+- **Feb 2026 - May 2026:** Integration testing, validation support
+- **Jun 2026 - Aug 2026:** Harmonyzer integration, production release
 
 ---
 
-**Document Status:** Technical specification for FPGA development and prototype validation
+**Document Status:** Technical specification for phased FPGA/software development (v2.0, Nov 20, 2025)
 
-**Next Steps:**
-1. Review with Per Vices engineering to assess FPGA resource availability
-2. Prioritize FPGA development (CIC filters, waveform looping)
-3. Develop pulse sequence software interface
-4. Validate with prototype testing per test_validation_plan.md
+**Next Steps (Nov 21-25, 2025):**
+1. **Submit to Per Vices** with SOW request (target: Dec 6 SOW draft, Dec 13 approval)
+2. **Clarify FPGA scope:** Which P0 features in prototype? P1/P2 timeline?
+3. **Begin software development:** UDP receiver, pulse compiler (Dec 2025 start)
+4. **Prepare validation plan:** Map test sequences to Mar-May 2026 timeline
+
+**Decision Gates:**
+- **Dec 13, 2025:** SOW approval (FPGA scope, prototype delivery Feb 28)
+- **May 15, 2026:** Prototype acceptance (P0 sequences functional)
+- **Jun 30, 2026:** Beta testing complete (P0+P1 validated)
+- **Aug 1, 2026:** Production release (P0+P1+P2 ready)
 
 **Contact Information:**
 Chad M. Rienstra, Ph.D.
