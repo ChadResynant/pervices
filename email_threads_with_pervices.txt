@@ -1,0 +1,463 @@
+Hi Chad,
+
+That is great news and I hope you had a great time at your nephew's wedding.
+
+I completely understand the being a perfectionist and let's start with something where we can get into the small details as the project evolves and the discussions dive in deeper. We absolutely want to support you and will work with you each step of the way to ensure successful integration. Once we receive the feedback from your side we may have some questions or we may put together a statement of work which will include validation metrics. It makes sense at that point to ensure that as many of the details are covered because we really want to see this be successful for you, and us.
+
+Looking forward to receiving the feedback on the use case and interfaces for connecting with other equipment in the system.
+
+All the best,
+
+Brandon
+
+On 2025-10-31 09:06, Chad Rienstra wrote:
+Thanks for following up. I had travel for my nephew’s wedding last weekend and a few end of October deadlines for other projects, but overall trending in the right direction and I will definitely have time this weekend to finish this up. One of the projects is a legal case with a hard deadline. I always hate doing those at least until the consulting checks arrive in the mail… :) 
+
+I’ll try not to be a perfectionist about this but keep puzzling over some small details, need to remember that this is the first prototype.
+
+Good news is that we have received a large order from Indiana U., which we could fill with current technology if necessary, but it gives us some extra breathing room to invest in this R&D direction and do it properly.
+
+Chad
+
+
+Chad M. Rienstra, Ph.D.
+President & CEO
+Resynant, Inc.
+chad@resynant.com
+
+
+Resynant_logo.png
+
+On Oct 30, 2025, at 12:37 PM, Brandon Malatest <brandon.m@pervices.com> wrote:
+
+Hi Chad,
+
+I hope you are doing well and the crazy week was not followed up by another one.
+
+This is just a follow up to see if you had an opportunity to draft the simple concept together for us to review. We are still very excited to be working on this project together.
+
+Thank you and all the best,
+
+Brandon
+
+On 2025-10-17 10:53, Chad Rienstra wrote:
+Hi Brandon,
+
+Thanks for following up! It has been a crazy week with some hardware problems on site that we are trying to resolve (HVAC system interfering with all our measurements). This has put me behind on everything else. I am hoping to catch up on the use case examples this weekend. If you don’t mind, I’ll first draft something simple to get started and then we will need to add some more advanced use cases later. 
+
+Chad
+
+
+Chad M. Rienstra, Ph.D.
+President & CEO
+Resynant, Inc.
+chad@resynant.com
+
+
+<Resynant_logo.png>
+
+On Oct 17, 2025, at 9:43 AM, Brandon Malatest <brandon.m@pervices.com> wrote:
+
+Hi Chad,
+
+I hope all is well with you.
+
+I just wanted to follow up to see if you had an opportunity to put together more detail on the use case (exactly what we would be interfacing to and the sequence of events to take place during operation). This would be a great help for us to ensure we can provide a solution that meets exactly what you are trying to accomplish.
+
+Looking forward to hearing back.
+
+Thank you and all the best,
+
+Brandon
+
+On 2025-10-03 11:02, Laura M wrote:
+Hi Chad,
+
+Thank you for your understanding. I will reschedule the meeting to 2:30pm CT/3:30pm ET on Tuesday, October 7.
+
+The Zoom call has also been rescheduled:
+
+Per Vices is inviting you to a scheduled Zoom meeting.
+
+Topic: Per Vices - Resynant (Dynamic Range and Trigger Discussion)
+Time: Oct 7, 2025 03:30 PM Eastern Time (US and Canada)
+Join Zoom Meeting
+https://us02web.zoom.us/j/83552264023?pwd=2TyHbnKbRshnUzuHIglrwuHrCFf3ut.1
+
+Meeting ID: 835 5226 4023
+Passcode: 006834
+
+---
+
+One tap mobile
++16473744685,,83552264023#,,,,*006834# Canada
++16475580588,,83552264023#,,,,*006834# Canada
+
+Join instructions
+https://us02web.zoom.us/meetings/83552264023/invitations?signature=RYWJYcjXuTAK_FHWKp6_23GSK4QLlyxWrRdbOz-uC1k
+
+Best regards,
+Laura
+
+On 03/10/2025 14.36, Chad Rienstra wrote:
+Understood. Tuesday October 7 I am available from 2:30 to 5 pm CT. 
+
+Chad M. Rienstra, Ph.D.
+President & CEO
+Resynant, Inc.
+chad@resynant.com
+
+
+<Resynant_logo.png>
+
+On Oct 3, 2025, at 9:19 AM, Laura M <laura.m@pervices.com> wrote:
+
+Hi Chad,
+
+Unfortunately one of the people that we want to have on the call is sick today, so we will have to postpone the call. I am sorry for the short notice.
+
+Would it work for you to reschedule to Tuesday, October 7 at 2pm ET or later? Please let me know what you think.
+
+Thank you and best regards,
+Laura
+
+On 02/10/2025 17.47, Brandon Malatest wrote:
+Hi Chad,
+
+Thank you very much for sharing the below and we can absolutely discuss more on Friday.
+
+Looking forward to it.
+
+All the best,
+
+Brandon
+
+On 2025-10-01 11:50, Chad Rienstra wrote:
+Hi Brandon,
+
+I’m looking forward to our discusson on Friday. I spoke with my partners at PhoenixNMR this morning and got a little bit more detail that may be useful for our discussion.
+
+1. With respect to digitization, filtering and dynamic range. We think it is likely that if we can stream 320 MSPS at 16 bit and decimate by CIC down to 10 MHz (32-fold reduction) on the FPGA, then subsequent custom filtering steps could be done on the Linux host to meet final bandwidth and dynamic range requirements. Let’s review this logic and data flow to be sure we are in agreement.
+
+2. Regarding triggers, Phoenix RF engineers have clarified that the precision for GPIO output TTL triggers would need to be ~100 ns to ensure consistency in high power RF levels and amplifier response times. I think from our previous discussion that this is still within the range achievable with current hardware, but I wanted to clarify this requirement further in case we are close to the edge.
+
+3. They had some questions about latency and requirements for RTOS on the Linux system. I think you have addressed that already but it would be useful to review data stream rates and potential bottlenecks for complex waveforms.
+
+Thanks. See you Friday.
+
+Chad
+
+Chad M. Rienstra, Ph.D.
+President & CEO
+Resynant, Inc.
+chad@resynant.com
+
+
+<Resynant_logo.png>
+
+On Sep 29, 2025, at 1:57 PM, Brandon Malatest <brandon.m@pervices.com> wrote:
+
+Hi Chad,
+
+Thank you for the quick response again.
+
+No problem at all. Friday we do have limited availability but would be available at 10h Central (11h Eastern). If that works for you I can set up a zoom meeting.
+
+Thank you again and all the best,
+
+Brandon
+
+On 2025-09-29 14:34, Chad Rienstra wrote:
+1. Based on the specified sampling rate, I expect decimation with CIC filter would achieve the required ENOB, although I understand this may be difficult to measure directly. Ultimately we would need to evaluate with NMR measurements at the magnet, using a specific NMR dynamic range test sample. Let’s discuss a bit more on the call but I think there are some use case examples on your web site that address this.
+
+2. GPIO expander should work for microsecond precision gating
+
+Thursday unfortunately I have an all day review panel for NIH. I am available Friday 9-11 am, 12-1 pm, or 2-4 pm Central US.
+
+Chad M. Rienstra, Ph.D.
+President & CEO
+Resynant, Inc.
+chad@resynant.com
+
+
+<Resynant_logo.png>
+
+On Sep 29, 2025, at 12:21 PM, Brandon Malatest <brandon.m@pervices.com> wrote:
+
+Hi Chad,
+
+I was able to speak with the lead engineers and had some feedback.
+
+Overall, the project looks well within the scope of what we would be confident in delivering a product to meet the requirements, however, there are some questions on the dynamic range and notes on the IO (see below). 
+
+1) Measuring Dynamic Range in ENOB is a bit tricky for us; is there an alternative measurement that they could provide us to help us better understand how to accomplish this? By default, we provide 16bit samples (16b I and 16b Q), which limits the intrinsic dynamic range. If they want to move to 32bit floats, this would require extensive FPGA work.
+
+2) Our current IO is directly connected to the FPGA, so we have comparatively low (2.5VDC) input levels. If they would like a dedicated or separate board to provide more protected inputs or greater electrical compatibility, we can provide that through a GPIO expander device.
+
+Would you be available for a call on Thursday at 12h Eastern to discuss more with myself and one of our lead engineers?
+
+Thank you and all the best,
+
+Brandon
+
+On 2025-09-29 10:28, Chad Rienstra wrote:
+Thanks again. I found the more precise specifications of the competitor’s product with respect to dynamic range, as follows:
+
+Digital down converter (ADC) is 240 MSPS 16 bit. 
+
+For 5 MHz bandwidth, 17 bit 
+For 1 MHz, 19 bit
+For 6 kHz, 23 bit
+
+This is by using CIC filters on the FPGA to downsample to 5 MHz and then additional FIRs after the downsampling 
+
+Please let me know if you need any further information. 
+
+Chad
+
+
+Chad M. Rienstra, Ph.D.
+President & CEO
+Resynant, Inc.
+chad@resynant.com
+
+
+<Resynant_logo.png>
+
+On Sep 29, 2025, at 8:54 AM, Brandon Malatest <brandon.m@pervices.com> wrote:
+
+Hi Chad,
+
+I hope you had a great weekend and thank you very much for the details below and compliments. I also very much appreciate you sharing the feedback on the Napatech case study (I am looking into this today).
+
+I will meet with my lead engineers to discuss more on the feedback that you provided below so I can ensure the product is a good fit. I can also confirm that we can take advantage of the oversampling to improve the dynamic range but I will discuss to what extent with the team ASAP.
+
+I am also able to confirm that Crimson TNG does have a hard limit of 4 on the number of channels but our customers in the past have synchronized multiple units together to achieve a higher channel count where the cost per radio chain stays the same by scaling in this fashion. It does impose a requirement for another dual port 10G NIC on the host side and another 1G port for command and control but those are usually lower cost than moving towards something like our Cyan platform which offers the higher channel count. The limitation is based on the number of transceivers available on the FPGA and moving to another class of FPGA results in something closer to the Cyan SDR.
+
+I hope to be able to get back to you very soon on what is met out of the box, what would require additional work, and a ROM cost estimate for bridging the two.
+
+Thank you and all the best,
+
+Brandon
+
+On 2025-09-27 08:55, Chad Rienstra wrote:
+Thank you Brandon and Laura for your timely responses to my inquiry, scheduling a call immediately and following through on our conversation yesterday. 
+
+Certainly the level of customer service, timeliness and ability to address customization requirements will be keys to our decisions how to proceed on these projects, and Per Vices has gotten off to a much better start than some others that I will not name.
+
+Please see detailed technical responses inserted within the text below.
+
+Chad M. Rienstra, Ph.D.
+President & CEO
+Resynant, Inc.
+chad@resynant.com
+
+
+<Resynant_logo.png>
+
+On Sep 26, 2025, at 2:14 PM, Brandon Malatest <brandon.m@pervices.com> wrote:
+
+Hi Chad,
+
+Thank you very much for taking the time on the call today - it was a pleasure speaking with you.
+
+I wanted to summarize the relevant topics in the call below, please do let me know if there is anything that I may be missing or is incorrect.
+
+Overall goal is for NMR spectroscopy where, at a high level, you are looking to transmit a pulse and then receive the reflected data.
+
+Number of Rx chains: 4
+Number of Tx chains: 4
+Deterministic phase coherency is required.
+Tuning range is from 0.2 MHz to 1.4 GHz
+Bandwidth per radio chain is 20 MHz (maximum)
+
+In practice, we would rarely go below an NMR detection frequency of 20 MHz so the low end of that range is flexible.
+
+The bandwidth in part may be defined by dynamic range requirements. Ideally we would like to achieve an ENOB of 20 at 100 kHz final spectral width. This is not a strict requirement, but it would exceed the capabilites offered by other vendors and we would like to be able to provide this as a specification that distinguishes our final product. Varian’s prior art DDR (direct digital receiver) operated at 20 MHz and then decimated in the DSP down to the user desired spectral width. This achieved ~18-19 bits dynamic range in practice. Perhaps sampling at the higher end of the Crimson TNG range (which I understand to be 325 MHz) could provide—again theoretically—another factor of 16 in sampling which would gain 2 bits in dynamic range. In practice whether this is the best way to achieve the dynamic range specification is not clear to me. This assumes that decimation takes place on the FPGA DSP stage.
+
+To put in context the requirement: many NMR experiments are performed with solvent signal that is 10^6 times stronger than the solutes. There are strategies to reduce the large solvent signal (so called “solvent suppression”) but these are not universally applicable, so the ability to detect over a 20 bit range would be highly beneficial for many use cases.
+Rx Performance:
+Requirement: 6dB NF
+
+
+Correct. Our design includes a low noise preamplifier integrated into the NMR probe electronics, so the NMR signals would be amplified by a ~1 dB NF preamp by 30 dB or more above thermal noise floor. It is possible to add a second 30 dB preamp if needed, but this may introduce dynamic range concerns as noted above. But my calculation of total system NF under that assumption gives no significant contribution from the Rx at 6 dB NF.
+
+Tx Performance:
+Requirement: max output of +10dBm
+Objective: up to 60dB of attenuation for defined periods of time with microseconds between when attenuation would be changing; controllable with 10dB step sizes
+
+Correct. Control with 10 dB step sizes would be sufficient; small step sizes (say 3 dB or even 1 dB) ideal if it can be done without much additional design effort. Ultimately we are using the Tx DAC to define waveforms, where the competition has about 0.1% precision in amplitude and 0.1 degree phase, within the “fine” adjustment range. But then the large steps are needed for coarse attenuation.
+
+External Interfaces:
+Requirement: provide a TTL trigger to external pre-amplifier and amplifiers for each of the receive and transmit radio chains; 8 total triggers (4 for Rx, one tied to each channel; 4 for Tx, one tied to each channel)
+
+Correct. 8 total triggers is the base requirements. An additional spare line trigger on each channel would be ideal. (total of 12 triggers)
+The data flow would be for the waveforms to initially be sent to the SDR over 10G links and using timed commands to trigger the transmission on, transmission off, and receive on. In the future it would be beneficial to move the waveforms to be on the SDR but more details on the specific waveforms would be required and we would need to explore different options for freeing up resources on the FPGA to accommodate this.
+
+Correct. We currently implement pulse sequences through a combination primarily three types of events: (1) fixed pulse elements (step function rectangular pulses) with a single amplitude and phase at the carrier frequency; (2) shaped pulses such as Gaussian, sinc, tangent, and a few others most commonly, which would have a defined list of phases and amplitudes, typically a list of ~5,000 elements defining, say, a 1 ms waveform in 200 ns steps; and (3) decoupling waveforms that are typically ~128 to 256 elements of defined phase and amplitude, but repeated many times; e.g., a loop over a waveform with 256 steps, so that waveform would run for 10s of microseconds, but then repeat 10s to 100s of times over the course of a single scan or transient (within 1 second). Traditionally these decoupling waveforms would be preloaded onto the FPGA and looped. The shaped waveforms in category 2 are typically not repeated 10s to 100s of times and therefore would not necessarily need to be stored on the FPGA. I think in principle everything could be loaded onto a FIFO via the 10 G for every scan, but we would need to think about the latency and overhead which I see has come up in another project I found with the U. Toronto MRI group.
+
+You will also need to ensure you have a 10GBASE-R NIC on the interfacing host system.
+
+Correct.
+The data format that the received data would be sent is UDP packets (https://support.pervices.com/application-notes/pvan-11-dataformat-spec/)
+
+Understood. I will need to confirm with my software engineer how best to do the conversion, but I do not anticipate that this will be an issue as long as the packets have been decimated by the FPGA DSP, so then we would be dealing with typical acquisition sizes of ~1 MB per second. In other words, our final spectral widths are typically 100 kHz for an acquisition time of ~100 ms, or a dwell time 10 microseconds * 10,000 complex points. In OVJ “fid” format that would be 800 kB (8 bytes per complex point). 
+Timelines and Quantities:
+
+Looking to move quickly on the initial order and need to review the NREs to accommodate the requirements (and ideally objectives) above. Initial quantity of1 with potentially 10 within the next 12 months and then up to 50-99 per year once in full production. At these quantities we would be able to provide volume discounts.
+
+Currently we are filling orders from customers using refurbished legacy Varian transmitters and receivers. We have 2 orders x 2 units in hand, and a few others pending. The sooner we can phase out the old Varian technology, the better we can serve our customers and we would anticipate this will lead to large growth in 2026-27.
+
+Looking forward to hearing back on anything that may have been missed or if anything in the above needs to be corrected.
+
+I think we have covered the major issues here. One minor consideration is that we could have special use cases with more than 4 channels, although rare, I would want to think for future proofing how we would handle such a case. Perhaps it is a full redesign to extend beyond 4 channels in the Crimson platform. This would not be a showstopper but something to think through. Many of the >4 channel use cases could be accommodated by compromising slightly on the timing precision etc. (those 5th, 6th channels are for external events that do not require synchronization of RF phase, so maybe simplest to accommodate with the spare line triggers initiating events on another unit, etc.) Again a minor point but something I thought I should mention before we get too far down the path with Crimson 4 channel if that is a strict limitation. I might still decide as a business decision it is best to offer only 4 channels, which would be 95%+ of our customers.
+
+Thank you and all the best,
+
+
+Thank you again for your excellent customer service and I look forward to moving forward with next steps. Have a great weekend.
+
+Chad
+
+
+Brandon
+
+On 2025-09-26 10:38, Chad Rienstra wrote:
+Confirmed. Thanks.
+
+Chad M. Rienstra, Ph.D.
+President & CEO
+Resynant, Inc.
+chad@resynant.com
+
+
+<Resynant_logo.png>
+
+On Sep 26, 2025, at 9:37 AM, Laura M <laura.m@pervices.com> wrote:
+
+Dear Chad,
+
+Thank you very much for the quick response as well. I have scheduled a zoom meeting for 1 pm Central US with the details below and invite attached:
+
+Per Vices is inviting you to a scheduled Zoom meeting.
+
+Topic: Per Vices - Resynant
+Time: Sep 26, 2025 02:00 PM Eastern Time (US and Canada)
+Join Zoom Meeting
+https://us02web.zoom.us/j/82361509500?pwd=xCzmAcfzR7yM0NbRcy8NE09k8W5sad.1
+
+Meeting ID: 823 6150 9500
+Passcode: 535831
+
+---
+
+One tap mobile
++16473744685,,82361509500#,,,,*535831# Canada
++16475580588,,82361509500#,,,,*535831# Canada
+
+Join instructions
+https://us02web.zoom.us/meetings/82361509500/invitations?signature=c62HnzbuIJ68b_0duqL7VqTpU4HmsQCijZZ0KXOla5Q
+
+Thank you and best regards,
+
+Laura
+
+On 2025-09-26 10:01, Chad Rienstra wrote:
+Dear Laura,
+
+Thank you for your quick response. Yes I have time this afternoon for a call. I am in Central US time zone (9 am right now). I could be available for a call between 1 and 4 pm Central US.
+
+Chad
+
+Chad M. Rienstra, Ph.D.
+President & CEO
+Resynant, Inc.
+chad@resynant.com
+
+
+<Resynant_logo.png>
+
+On Sep 26, 2025, at 8:57 AM, Laura M <laura.m@pervices.com> wrote:
+
+Dear Chad,
+
+Thank you very much for reaching out and for using the BYOSDR tool - that helps answer a lot of the questions we usually need to help determine the best fit.
+
+Based on the specifications, I do believe our Crimson TNG would be a great fit but we always like to have a conversation first to learn more about the use case and ensure it is the right product. Would you have time this afternoon for a brief call to discuss more with one of our team members?
+
+Thank you again and best regards,
+
+Laura
+
+On 2025-09-26 09:26, Per Vices wrote:
+Name: Chad Rienstra
+Company: Resynant, Inc.
+Email: chad@resynant.com
+Phone: 2176498932
+What would you like help with?: Custom SDR Inquiry
+Message: I am interested in developing an SDR product for high-resolution solid-state NMR spectroscopy, based off the successful implementation for MRI. Our systems have similar requirements to MRI scanners but some custom modifications also. I have been investigating a variety of approaches to this problem and think that it is a good fit for working with your group. Thanks. Chad Rienstra (President & CEO, Resynant, Inc., https://urldefense.proofpoint.com/v2/url?u=http-3A__Resynant.com&d=DwICaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=Xb87VQesf4CTYpjb_GQCC0oC-gRpz93Kp5OEwuAab8E&m=c4d0buhZz4gXqSrGFjE3bXk_KtQEbfM9K1iBKZ7iUvmNDyjPgCyz9IHmmbwxT3fv&s=DtAyyI_M6XXsIzXUZtoL58eHTDCfRCLImtmkrEieCNc&e=; also co-director of the National Magnetic Resonance Facility at Madison, https://urldefense.proofpoint.com/v2/url?u=http-3A__Nmrfam.wisc.edu&d=DwICaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=Xb87VQesf4CTYpjb_GQCC0oC-gRpz93Kp5OEwuAab8E&m=c4d0buhZz4gXqSrGFjE3bXk_KtQEbfM9K1iBKZ7iUvmNDyjPgCyz9IHmmbwxT3fv&s=CPIavQ66bdCSX08bd54xcZUteqZ9LigSm7_62uUB2W4&e=.)
+
+---
+
+Date: 2025-09-26
+Time: 13:26
+Page URL: https://urldefense.proofpoint.com/v2/url?u=https-3A__www.pervices.com_contact_&d=DwICaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=Xb87VQesf4CTYpjb_GQCC0oC-gRpz93Kp5OEwuAab8E&m=c4d0buhZz4gXqSrGFjE3bXk_KtQEbfM9K1iBKZ7iUvmNDyjPgCyz9IHmmbwxT3fv&s=509W1PoYB5hmLM39fVZ7KMvLsA6SpNqwMQ6zRWhD0Ao&e=
+User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0.1 Safari/605.1.15
+Remote IP: 208.73.94.116
+Powered by: Elementor
+
+--
+Laura M.
+Per Vices Corporation
+solutions@pervices.com
+https://urldefense.proofpoint.com/v2/url?u=https-3A__www.pervices.com_&d=DwICaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=Xb87VQesf4CTYpjb_GQCC0oC-gRpz93Kp5OEwuAab8E&m=c4d0buhZz4gXqSrGFjE3bXk_KtQEbfM9K1iBKZ7iUvmNDyjPgCyz9IHmmbwxT3fv&s=oL1H29rh1Eu6qIt15fuG3s1nKw370ZkftnIoM1gAHlo&e=
+
+
+-- 
+Laura M.
+Per Vices Corporation
+solutions@pervices.com
+https://www.pervices.com/
+<meeting-82361509500.ics>
+
+-- 
+Brandon Malatest, COO
+Per Vices Corporation
++1 647 534 9007
+
+-- 
+Brandon Malatest, COO
+Per Vices Corporation
++1 647 534 9007
+
+-- 
+Brandon Malatest, COO
+Per Vices Corporation
++1 647 534 9007
+
+-- 
+Brandon Malatest, COO
+Per Vices Corporation
++1 647 534 9007
+
+-- 
+Brandon Malatest, COO
+Per Vices Corporation
++1 647 534 9007
+
+
+
+-- 
+Brandon Malatest, COO
+Per Vices Corporation
++1 647 534 9007
+
+-- 
+Brandon Malatest, COO
+Per Vices Corporation
++1 647 534 9007
+
+-- 
+Brandon Malatest, COO
+Per Vices Corporation
++1 647 534 9007
