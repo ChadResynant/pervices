@@ -324,7 +324,7 @@ class AcodeBridge:
         for controller, parser in self.parsers.items():
             try:
                 logger.info(f"Parsing Acode stream for {controller}")
-                opcodes = parser.parse()
+                opcodes = parser.parse_all()
                 sequences[controller] = opcodes
                 logger.info(f"  Parsed {len(opcodes)} opcode(s)")
 

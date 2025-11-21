@@ -152,13 +152,13 @@ class TestAcodeBridge:
         for controller in ["Master1", "RF1", "RF2"]:
             filepath = tmp_path / f"exp1.greg.012345.ps.{controller}"
 
-            # Write minimal Acode file (HALT opcode = 13)
+            # Write minimal Acode file (HALT opcode = 4)
             with open(filepath, 'wb') as f:
                 # Write a few opcodes
                 f.write((46).to_bytes(4, byteorder='big'))   # EVENT1
                 f.write((1000).to_bytes(4, byteorder='big'))  # timing
                 f.write((0x01).to_bytes(4, byteorder='big'))  # gates
-                f.write((13).to_bytes(4, byteorder='big'))    # HALT
+                f.write((4).to_bytes(4, byteorder='big'))    # HALT
 
             acode_files.append(str(filepath))
 
@@ -204,7 +204,7 @@ def test_integration_psg_completion(tmp_path):
             f.write((46).to_bytes(4, byteorder='big'))   # EVENT1
             f.write((1000).to_bytes(4, byteorder='big'))  # timing
             f.write((0x01).to_bytes(4, byteorder='big'))  # gates
-            f.write((13).to_bytes(4, byteorder='big'))    # HALT
+            f.write((4).to_bytes(4, byteorder='big'))    # HALT
 
     # Create bridge
     bridge = AcodeBridge(watch_dirs=[str(exp_dir)], crimson_api=None)

@@ -379,7 +379,7 @@ class CrimsonAPI:
 
         elif opcode_type == 'PHASESHIFT':
             # Set RF phase
-            phase = opcode.get('phase', 0)
+            phase = opcode.get('phase_degrees', 0)
             self.set_phase(channel, phase, 'tx')
 
         elif opcode_type == 'EVENT1':
