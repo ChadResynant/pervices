@@ -1,1 +1,8 @@
 .DS_Store
+
+# Python virtual environments
+software/pervices-nmr-env/
+venv/
+env/
+*.pyc
+__pycache__/
